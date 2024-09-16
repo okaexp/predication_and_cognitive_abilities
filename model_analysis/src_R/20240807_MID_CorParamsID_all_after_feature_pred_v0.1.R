@@ -21,21 +21,21 @@ dat_job <- read.csv("../data/job_sum_score.csv")
 
 # ターゲットキーのみを集計したデータフレーム(dat_aggregate)を作る ----
 dat_agg_map <- dat_maxmap_param %>%
-  dplyr::inner_join(dat_rpms, by = "cwid") %>%
-  dplyr::inner_join(dat_sst, by = "cwid") %>%
-  dplyr::inner_join(dat_job, by = "cwid")
+  dplyr::inner_join(dat_rpms, by = "ID") %>%
+  dplyr::inner_join(dat_sst, by = "ID") %>%
+  dplyr::inner_join(dat_job, by = "ID")
 
 dat_agg_mrr <- dat_maxmrr_param %>%
-  dplyr::inner_join(dat_rpms, by = "cwid") %>%
-  dplyr::inner_join(dat_sst, by = "cwid") %>%
-  dplyr::inner_join(dat_job, by = "cwid")
+  dplyr::inner_join(dat_rpms, by = "ID") %>%
+  dplyr::inner_join(dat_sst, by = "ID") %>%
+  dplyr::inner_join(dat_job, by = "ID")
 
 # 2. 相関分析 ----
 # m,kについては対数変換をとる
 
 # 2.1. map@26136 ----
 dat_cor_mklog_map_at_26136 <- dat_agg_map %>%
-  dplyr::select(-cwid) %>%
+  dplyr::select(-ID) %>%
   dplyr::mutate(log_m = log(m),
                 log_k = log(k)) %>%
   dplyr::select(log_m, log_k, maxmap,
@@ -43,7 +43,7 @@ dat_cor_mklog_map_at_26136 <- dat_agg_map %>%
 mycor(1:6, dat_cor_mklog_map_at_26136, latex = FALSE)
 
 dat_cor_mklog_mrr_at_26136 <- dat_agg_mrr %>%
-  dplyr::select(-cwid) %>%
+  dplyr::select(-ID) %>%
   dplyr::mutate(log_m = log(m),
                 log_k = log(k)) %>%
   dplyr::select(log_m, log_k, maxmrr,
@@ -77,19 +77,19 @@ dat_maxmrr_conv_wide <- dat_maxmrr_param_conv %>%
 
 #相関係数ようのデータに整形
 dat_maxmap_cor <- dat_maxmap_conv_wide %>%
-  dplyr::inner_join(dat_rpms, by = "cwid") %>%
-  dplyr::inner_join(dat_sst, by = "cwid") %>%
-  dplyr::inner_join(dat_job, by = "cwid")
+  dplyr::inner_join(dat_rpms, by = "ID") %>%
+  dplyr::inner_join(dat_sst, by = "ID") %>%
+  dplyr::inner_join(dat_job, by = "ID")
 
 dat_maxmrr_cor <- dat_maxmrr_conv_wide %>%
-  dplyr::inner_join(dat_rpms, by = "cwid") %>%
-  dplyr::inner_join(dat_sst, by = "cwid") %>%
-  dplyr::inner_join(dat_job, by = "cwid")
+  dplyr::inner_join(dat_rpms, by = "ID") %>%
+  dplyr::inner_join(dat_sst, by = "ID") %>%
+  dplyr::inner_join(dat_job, by = "ID")
 
 
 #H,Lで分割して、相関係数用のデータにする
 dat_maxmap_cor_mklog <- dat_maxmap_cor %>%
-  dplyr::select(-cwid) %>%
+  dplyr::select(-ID) %>%
   dplyr::mutate(log_m_H = log(m_H),
                 log_k_H = log(k_H),
                 log_m_L = log(m_L),
@@ -97,7 +97,7 @@ dat_maxmap_cor_mklog <- dat_maxmap_cor %>%
   dplyr::select(log_m_H, log_k_H, log_m_L, log_k_L, maxmap_L, maxmap_H, SumRPSMCorrect, SumSSTFinalRating, SumJobScore)
 
 dat_maxmrr_cor_mklog <- dat_maxmrr_cor %>%
-  dplyr::select(-cwid) %>%
+  dplyr::select(-ID) %>%
   dplyr::mutate(log_m_H = log(m_H),
                 log_k_H = log(k_H),
                 log_m_L = log(m_L),

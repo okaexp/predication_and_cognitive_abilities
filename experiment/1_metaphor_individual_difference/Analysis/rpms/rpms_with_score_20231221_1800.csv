@@ -1,4 +1,4 @@
-success,trial_type,trial_index,time_elapsed,internal_node_id,cwid,StartTime,EndTime,rt,response,task,question_order,stim,answer,stimulus,Correct
+success,trial_type,trial_index,time_elapsed,internal_node_id,ID,StartTime,EndTime,rt,response,task,question_order,stim,answer,stimulus,Correct
 1.0,fullscreen,0,2595,0.0-0.0,4189255,2023/12/21 14:26:36,2023/12/21 14:29:07,,,,,,,,0
 ,survey-html-form,1,5697,0.0-1.0,4189255,2023/12/21 14:26:36,2023/12/21 14:29:07,3101.0,Array,rpms_instruction,,,,,0
 ,survey-html-form,2,13449,0.0-2.0,4189255,2023/12/21 14:26:36,2023/12/21 14:29:07,7751.0,Array,rpms_instruction,,,,,0
