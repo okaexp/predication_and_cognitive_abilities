@@ -1,0 +1,15 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open 1_pre_exp_sst_v0.3.html",
+            //"file": "/Users/Oka/Dropbox/比喩関連/基盤数/SemanticSimilarityTest/code/experiment/1_PreExp_SST/OnlineExp/1_pre_exp_sst_v0.3.html",
+            "file": "${file}"
+        }
+    ]
+}

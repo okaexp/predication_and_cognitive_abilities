@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="./jspsych.js"></script>
+    <script src="./plugins/plugin-survey-html-form.js"></script>
+    <script src="./plugins/plugin-html-keyboard-response.js"></script>
+    <script src="./plugins/plugin-survey-text.js"></script>
+    <script src="./plugins/plugin-fullscreen.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="./css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    //In this file, we only shows the task related codes.
+    //i.e., there are no codes regarding how the data are saved online
+
+    const jsPsych = initJsPsych({
+        on_finish: () => {
+            jsPsych.data.displayData();
+        },
+    });
+
+    //beginning
+    const ex_start_time = new Date();
+    const ex_start_time_text = ex_start_time.getFullYear()+"/"+(ex_start_time.getMonth()+1)+"/"+ex_start_time.getDate()+ " "+ ex_start_time.getHours()+":"+("0" + ex_start_time.getMinutes()).slice(-2)+":"+("0" + ex_start_time.getSeconds()).slice(-2);
+    jsPsych.data.addProperties({"StartTime":ex_start_time_text});//参加者情報に格納
+
+    const FullScreen = {
+        type: jsPsychFullscreen,
+        fullscreen_mode: true,
+        message:"これから実験を始めます。実験はフルスクリーンで行われます。<br>"+
+        "（フルスクリーン非対応ブラウザの場合を除く）<br>"+
+        "*なお、実験を途中でやめる場合は、Escキーを押すことでフルスクリーンを解除することができます。<br><br>"+
+        "「次へ」ボタンを押すと次に進みます。<br><br>",
+        button_label:"次へ",
+        delay_after:1000
+    };
+    
+    const instruction = {
+        type: jsPsychSurveyHtmlForm,
+        html:
+              "<p style='text-algin:left'>この課題では、以下のように2つの単語が呈示されます。</p>" +
+              "<p style='font-size:48pt'>椅子 - ソファ</p>" +
+              "<p style='text-algin:left'><u>あなたは、呈示された2つの単語がどのように似ているかを回答欄に入力してください。</u></p>" +
+              "<p><br><br></br>" +
+              "<p style='text-algin:left'>準備ができたら「本番開始」ボタンを押して、課題をはじめてください。</p>",
+        button_label: "本番開始",
+        data: { task: 'sst_instruction' },
+    };
+
+    const debrief = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus:
+              "<p style='text-algin:left'>これで実験は終了です。お疲れ様でした。</p>" +
+              "<p style='text-algin:left'>スペースキーを押して次の実験に遷移するのをお待ちください。</p>",
+        choices: [' '],
+        data: { task: 'sst_debrief' },
+        on_finish:function(data){
+
+            const ex_finish_time = new Date();
+            const ex_finish_time_text = ex_finish_time.getFullYear()+"/"+(ex_finish_time.getMonth()+1)+"/"+ex_finish_time.getDate()+ " "+ ex_finish_time.getHours()+":"+("0" + ex_finish_time.getMinutes()).slice(-2)+":"+("0" + ex_finish_time.getSeconds()).slice(-2);
+            jsPsych.data.addProperties({"EndTime":ex_finish_time_text});
+        }
+    };
+
+    const createTrial = (setting) => {
+        const trial = {
+            type: jsPsychSurveyText,
+            preamble:
+                "<p style='text-algin:left'><u>以下に呈示された2つの単語が、どのように似ているかを回答欄に入力してください。</u></p>" +
+                "<p style='text-algin:center;font-size:48pt;'>" + `${setting.stim}` + "</p>",
+            questions: [
+                {prompt: "", name: 'answer', placeholder: "回答欄", required: true},
+            ],
+            button_label: '次へ',
+            data: {
+                task: 'sst_answer',
+                word_pair: setting.stim,
+            },
+
+            on_load: (data) => {
+                document.addEventListener('keypress', function (e) {
+                    if (e.keyCode === 13 || e.which === 13) {
+                        e.preventDefault();
+                        return false;
+                    }       
+                });
+
+                const focused_elem = document.activeElement;
+                focused_elem.blur();
+            },
+
+            on_finish: (data) => {
+                data.answer = jsPsych.data.get().last(1).values()[0].response.answer;
+            },
+        };
+        return trial;
+    };
+
+    const trialSettings = [
+        {stim: '鳥 - 飛行機'},
+        {stim: '時間 - 川'},
+        {stim: '酒場 - 教会'},
+        {stim: '山頂 - 針'},
+        {stim: '輪っか - ネックレス'},
+        {stim: '山 - 障害物'},
+        {stim: '太陽 - 電球'},
+        {stim: '愛 - 薬物'},
+        {stim: '結婚 - 合金'},
+        {stim: '剣 - 拳銃'},
+        {stim: '理論 - 建物'},
+        {stim: '記憶 - 牢獄'},
+        {stim: 'なぞなぞ - 迷宮'},
+        {stim: '思考 - 網'},
+        {stim: '美術館 - 墓'},
+        {stim: 'みかん - ボール'},
+        {stim: 'ダイヤモンド - 雪片'},
+        {stim: '道 - 川'},
+        {stim: '紙 - 葉っぱ'},
+        {stim: '会社 - 木'}
+     ];
+
+    const trials = trialSettings.map((s) => createTrial(s));
+    const trials_tl = {timeline: trials};
+    jsPsych.run([FullScreen, instruction, trials_tl, debrief]);
+
+  </script>
+</html>
